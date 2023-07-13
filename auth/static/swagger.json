@@ -1,0 +1,622 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "User Management API",
+      "description": "API endpoints for user management",
+      "version": "1.0"
+    },
+    "host": "172.31.33.142:5000",
+    "basePath": "/",
+    "schemes": [
+      "http"
+    ],
+    "paths": {
+      "/v1/user/register": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Register a new user",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User registered successfully"
+            }
+          }
+        }
+      },
+      "/v1/user/login": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Login user and generate token",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User credentials",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Token generated successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Username and password are required"
+            },
+            "401": {
+              "description": "Invalid username or password"
+            }
+          }
+        }
+      },
+      "/v1/user/info/{username}": {
+        "get": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Get user information",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "username",
+              "description": "Username of the user",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User information",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/v1/user/getAll": {
+        "get": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Get all users",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of users",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/v1/roles/getAll": {
+        "get": {
+          "tags": [
+            "Roles"
+          ],
+          "summary": "Get all roles",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of roles",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "roleId": {
+                      "type": "integer"
+                    },
+                    "roleName": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/v1/roles/create": {
+        "post": {
+          "tags": [
+            "Roles"
+          ],
+          "summary": "Create a new role",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Role details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "roleName": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Role created successfully"
+            },
+            "400": {
+              "description": "Role name is required"
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/v1/user/password/change": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Change user password",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Old and new password",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "old_password": {
+                    "type": "string"
+                  },
+                  "new_password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Password changed successfully"
+            },
+            "400": {
+              "description": "Old password and new password are required"
+            },
+            "401": {
+              "description": "Invalid old password"
+            },
+            "403": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/v1/admin/password/change/{username}": {
+        "put": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "Change user password as an admin",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "username",
+              "description": "Username of the user",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "New password",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "new_password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Password updated successfully"
+            },
+            "400": {
+              "description": "Username is required or New password is required"
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/v1/admin/role/change/{username}": {
+        "put": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "Change user role as an admin",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "username",
+              "description": "Username of the user",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Role name",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role_name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User role updated successfully"
+            },
+            "400": {
+              "description": "Role name is required"
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/v1/user/logout": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Logout user",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Username and password",
+              "required": false,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Logged out successfully (token)"
+            },
+            "400": {
+              "description": "Username and password are required"
+            },
+            "401": {
+              "description": "Invalid Token or Invalid username or password"
+            }
+          }
+        }
+      },
+      "/v1/user/delete/{username}": {
+        "delete": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Delete a user",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "username",
+              "description": "Username of the user",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User deleted successfully"
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/v1/token/validate": {
+        "post": {
+          "tags": [
+            "Token"
+          ],
+          "summary": "Validate token",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Token",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Token is valid"
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            }
+          }
+        }
+      },
+      "/v1/token/{username}/revoke": {
+        "delete": {
+          "tags": [
+            "Token"
+          ],
+          "summary": "Revoke user tokens",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "username",
+              "description": "Username of the user",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Bearer token",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User tokens revoked"
+            },
+            "401": {
+              "description": "Token is missing or invalid"
+            },
+            "403": {
+              "description": "Unauthorized"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      }
+    }
+  }
+  

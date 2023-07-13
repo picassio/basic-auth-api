@@ -1,0 +1,8 @@
+flask
+flask-mysqldb
+python-dotenv
+Werkzeug
+pyjwt
+redis
+flask_swagger_ui
+gunicorn
