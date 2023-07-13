@@ -13,13 +13,13 @@ This repository contains an API for user management. It provides endpoints for u
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/yourusername/api.git
+   git clone https://github.com/picassio/basic-auth-api.git
    ```
 
 2. Navigate to the project directory:
 
    ```shell
-   cd api/auth
+   cd basic-auth-api/auth
    ```
 
 3. Create a .env file in the project directory and define the required environment variables. You can use the provided .env.example file as a template.  
