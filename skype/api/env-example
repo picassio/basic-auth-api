@@ -1,0 +1,11 @@
+SKYPE_USERNAME="user"
+SKYPE_PASSWORD="password"
+RABBITMQ_HOST="RabbitMQ IP"
+RABBITMQ_PORT="RabbitMQ Port"
+RABBITMQ_USERNAME="RabbitMQ Username"
+RABBITMQ_PASSWORD="RabbitMQ Password"
+RABBITMQ_EXCHANGE="RabbitMQ Exchange name"
+RABBITMQ_QUEUE="RabbitMQ durable Queue name"
+RABBITMQ_TOPIC="RabbitMQ Topic name"
+RABBITMQ_LOG_FILE="RabbitMQ log file"
+AUTH_SERVICE_URL=http://localhost:5000/api/v1/token/validate

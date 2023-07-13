@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - '5001:5001'
+    depends_on:
+      - rabbitmq
+      - consumer
+    volumes:
+      - ./api/.env:/app/.env  # Mount the .env file to the /app/.env path inside the container
+      - ./api/token:/app/token  # Mount the token folder to the /app/token/ path inside the container
+    env_file:
+      - ./api/.env  # Load environment variables from the .env file
+    restart: unless-stopped
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./consumer/.env:/app/.env  # Mount the .env file to the /app/.env path inside the container
+      - ./api/token:/app/token  # Mount the token folder to the /app/token/ path inside the container
+    env_file:
+      - ./consumer/.env  # Load environment variables from the .env file
+    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    ports:
+      - 5672:5672   # for sender and consumer connections
+      - 15672:15672 # for serve RabbitMQ GUI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq-log:/var/log/rabbitmq
+    restart: unless-stopped
+volumes:
+  rabbitmq-data:
+  rabbitmq-log:

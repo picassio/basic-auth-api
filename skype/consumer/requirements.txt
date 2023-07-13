@@ -1,0 +1,3 @@
+skpy
+pika
+python-dotenv

@@ -1,0 +1,98 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Skype API",
+    "version": "1.0.0",
+    "description": "API for sending messages to Skype groups"
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/skype/groupId": {
+      "get": {
+        "summary": "Get Skype Group IDs and Topics",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Skype group chat IDs and topics",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "group_chat_id": "8:joe.4",
+                    "topic": "Skype Group 1"
+                  },
+                  {
+                    "group_chat_id": "8:daisy.5",
+                    "topic": "Skype Group 2"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/skype/send_group_message": {
+      "post": {
+        "summary": "Send Messages to Skype Groups",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "groups": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Skype Group ID"
+                        },
+                        "msg": {
+                          "type": "string",
+                          "description": "Message to send"
+                        }
+                      },
+                      "example": {
+                        "id": "8:joe.4",
+                        "msg": "Hello from the Skype API!"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Messages sent successfully"
+          },
+          "400": {
+            "description": "Invalid message format"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  }
+}
