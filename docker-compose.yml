@@ -1,0 +1,81 @@
+version: '3.8'
+services:
+  auth:
+    build:
+      context: ./auth/
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .env:/app/.env  # Mount the .env file to the /app/.env path inside the container
+    env_file:
+      - .env  # Load environment variables from the .env file
+    restart: on-failure
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE}
+    volumes:
+      - ./data/mysql-data:/var/lib/mysql
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "exit | mysql -h localhost -P 3306 -u root -p$$MYSQL_ROOT_PASSWORD" ]
+      interval: 5s
+      timeout: 20s
+      retries: 30    
+  redis:
+    image: redis:6-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis-data:/data
+    restart: on-failure
+  api:
+    build:
+      context: ./skype/api
+      dockerfile: Dockerfile
+    ports:
+      - '5001:5001'
+    depends_on:
+      - rabbitmq
+      - consumer
+    volumes:
+      - .env:/app/.env  # Mount the .env file to the /app/.env path inside the container
+    env_file:
+      - .env  # Load environment variables from the .env file
+    restart: on-failure
+  consumer:
+    build:
+      context: ./skype/consumer
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .env:/app/.env  # Mount the .env file to the /app/.env path inside the container
+    env_file:
+      - .env  # Load environment variables from the .env file
+    restart: on-failure
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    ports:
+      - 5672:5672   # for sender and consumer connections
+      - 15672:15672 # for serve RabbitMQ GUI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq-log:/var/log/rabbitmq
+    restart: on-failure
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 5    
+volumes:
+  rabbitmq-data:
+  rabbitmq-log:
+  redis-data:

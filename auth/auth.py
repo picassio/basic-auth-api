@@ -99,6 +99,18 @@ def create_tables():
             if not admin_role:
                 cur.execute("INSERT INTO roles (role_name) VALUES ('admin')")
 
+            # Create 'moderator' role if it doesn't exist
+            cur.execute("SELECT id FROM roles WHERE role_name = 'moderator'")
+            moderator_role = cur.fetchone()
+            if not moderator_role:
+                cur.execute("INSERT INTO roles (role_name) VALUES ('moderator')")
+
+            # Create 'user' role if it doesn't exist
+            cur.execute("SELECT id FROM roles WHERE role_name = 'user'")
+            user_role = cur.fetchone()
+            if not user_role:
+                cur.execute("INSERT INTO roles (role_name) VALUES ('user')")
+
             # Create 'guest' role if it doesn't exist
             cur.execute("SELECT id FROM roles WHERE role_name = 'guest'")
             guest_role = cur.fetchone()
